@@ -1,0 +1,76 @@
+<!-- All hardcoded text should come from intl injectable  -->
+
+<form (ngSubmit)="submit()">
+  <!-- Search -->
+  <div *ngIf="canSearch" class="search margin-b-5 padding-5">
+    <label>
+      Search:
+      <input [formControl]="searchControl" />
+    </label>
+    <button type="button" (click)="submit()">Submit</button>
+  </div>
+
+  <!-- Table -->
+  <table class="margin-b-5 padding-5" cdk-table [dataSource]="_data | async">
+    <ng-container
+      *ngFor="let column of dataSource.columns"
+      [cdkColumnDef]="column.key"
+    >
+      <th cdk-header-cell *cdkHeaderCellDef>
+        {{ column.header | toObservable | async }}
+      </th>
+      <td cdk-cell *cdkCellDef="let row">
+        <ng-template
+          [cdkPortalOutlet]="{ row, column } | toColumnPortal"
+        ></ng-template>
+      </td>
+    </ng-container>
+
+    <tr
+      cdk-header-row
+      *cdkHeaderRowDef="dataSource.getDisplayedColumns() | async"
+    ></tr>
+    <tr
+      cdk-row
+      *cdkRowDef="let row; columns: dataSource.getDisplayedColumns() | async"
+    ></tr>
+  </table>
+
+  <!-- Pagination -->
+  <div class="pagination margin-b-5 padding-5">
+    Pagination:
+    <button type="button" (click)="firstPage()">First</button>
+    <button type="button" (click)="prevPage()">Prev</button>
+    <span class="padding-h-5">{{ currentPageControl.value }}</span>
+    <button type="button" (click)="nextPage()">Next</button>
+    <button type="button" (click)="lastPage()">Last</button>
+    <label>
+      Per page:
+      <select [formControl]="pageSizeControl">
+        <option
+          *ngFor="let pageSizeOption of _pageSizeOptions | async"
+          [value]="pageSizeOption"
+        >
+          {{ pageSizeOption }}
+        </option>
+      </select>
+    </label>
+  </div>
+
+  <!-- Column Selector -->
+  <div class="column-selector padding-5">
+    <label>
+      Column Selector:
+      <input [formControl]="displayColumnInputControl" />
+    </label>
+    <button
+      type="button"
+      (click)="updateDisplayedColumns(displayColumnInputControl.value)"
+    >
+      Submit
+    </button>
+  </div>
+
+  <!-- Filter -->
+  <!-- TODO -->
+</form>

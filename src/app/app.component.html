@@ -1,0 +1,17 @@
+<!-- Basic Example Implementation -->
+<div>Basic Example:</div>
+<table-view [dataSource]="exampleDataSource"></table-view>
+
+<br />
+<div class="divider"></div>
+<br />
+
+<!-- Sample Http Paginated Implementation -->
+<div>Http Example:</div>
+<table-view
+  [dataSource]="exampleHttpDataSource"
+  currentPage="1"
+  pageSize="10"
+></table-view>
+
+<!-- TODO Route based table params -->
